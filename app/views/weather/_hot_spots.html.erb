@@ -1,0 +1,29 @@
+<div class='hs_header'>
+  <%= @city.name + ', ' + @city.state %> | <%= @radius %> Miles
+</div>
+<div class='hs_links'>
+ <span class='hs_marker_link'><%= link_to 'Show', 'javascript:showHotSpotMarkers()' %></span> |
+  <span class='hs_marker_link'><%= link_to 'Hide', 'javascript:clearHotSpotMarkers()' %></span>
+</div>
+<% count = 1 %>
+<% for hs in hot_spots %>
+  <div class='hs_elem'>
+    <div class='hs_elem_marker'>
+      <% num = count.to_s %>
+      <% num = '0' + num if count < 10 %>
+      <%= image_tag "http://google-maps-icons.googlecode.com/files/yellow" + num + ".png" %>
+    </div>
+    <div class='hs_elem_info'>
+      <div class='hs_elem_loc'>
+        <%= link_to hs.loc, 'javascript:clearHotSpotMarkers(' + count.to_s + ')' %></a>
+      </div>
+      <div class='hs_elem_date'>
+        <%= Time.at(hs.dateTime/1000).strftime('%A, %B %d') %>
+      </div>
+    </div>
+    <div class='hs_elem_temp'>
+      <%= hs.temp %><span class='hs_elem_temp_unit'>°F</span>
+    </div>
+  </div>
+<% count += 1 %>
+<% end %>

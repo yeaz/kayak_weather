@@ -1,0 +1,256 @@
+<div id='fixedWidthOuter'>
+  <div id='hd'>
+    <a id="logo" href="http://www.kayak.com">
+      <img id="logoimg" width="187" height="43" alt="KAYAK - Travel Deals - Cheap flights and hotels" src="http://cdn2.kayak.com/v534174/images/kayak-logo.png">
+    </a>
+    <div id="headermaintabs">
+      <a id="hot-spots-link" class="navselected" href="/">Hot Spots</a>
+    </div>
+  </div>
+  <div id='bd'>
+    <div id='bd-main' class='bdMain'>
+      <div class="fdMainLeft">
+        <div id='hot_spots_form_wrapper'>
+          <%= form_tag get_hot_spots_url, method: :get, id: :hot_spots_form do %>
+          
+            <div id="city-input-field">
+              <% cities_array = [['', 0]] %>
+              <% cities_array += City.order(:name).map { |city| [city.name + ", " + city.state, city.id] } %>
+              <label class="fieldLabel">Destination</label>
+              <a id="city-input-wrapper" class="dropdown-wrapper dropdown defaultSelect">
+                <span id="city-input-status" class="dropdown-status"></span>
+                <span class="dropdown-icon"></span>
+                <%= select_tag :city, options_for_select(cities_array, 0), class: 'dropdown-select'  %>
+              </a>
+            </div>
+        
+            <div id="radius-input-field">
+              <div id="radius_header">
+                <label id="radius_label" class="fieldLabel">Distance</label>
+                <div id="radius_value">
+                  <%= text_field_tag :radius %>
+                  <label id="radius_unit" class="fieldLabel">miles</label>
+                </div>
+              </div>
+              <div id='radius-slider'></div>
+            </div>
+        
+            <button id="hot_spots_submit_button" class="ui-button ui-button-huge" type="submit">
+              <span>Find Hot Spots</span>
+            </button>
+          <% end %>
+        </div>
+        <div id="map_canvas" style="width:600px; height:500px"></div>
+      </div>
+      <div class="fdMainRight">
+        <div id='virgin_promo'>
+          <div id="fdvirgin">
+            <img alt="SEARCH ONE AND DONE. - Compare hundreds of travel sites at once. Choose where to book." src="http://cdn3.kayak.com/v534175/images/fd/sloganonly/fd-marketing-message.png">
+            <div class="promoText">
+              Compare hundreds of travel sites at once.
+              <br>
+              Choose where to book.
+            </div>
+          </div>
+          <div id="fdRailMobilePromo" class="fdRailSection fdVirginSession ">
+            <h2>Free KAYAK Mobile Apps</h2>
+            <div class="contentSeparator"></div>
+            <div class="liner">
+              <div class="mobileDownloads">
+                The #1 Travel App
+                <b>20,000,000+ downloads</b>
+               </div>
+               <div class="mobileLinks">
+                 <a class="fd-mobilelink" href="http://www.kayak.com/mobile">Try KAYAK Mobile.</a>
+              </div>
+            </div>
+        </div>
+        </div>
+        <div id='loading_wrapper' style="display:none">
+          <div id='loading_message'>Please wait momentarily,<br> We are searching for nearby hot spots</div>
+          <%= image_tag 'loading.gif', alt:'Loading...' %>
+        </div>
+        <div id='result'></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type='text/javascript'>
+
+  var map = null;
+  var cityMarker = null;
+  var cityCircle = null;
+  var hotSpotMarkers = [];
+  var shadowImage = null;
+  
+  function initializeMap() {
+    var mapOptions = {
+      center: new google.maps.LatLng(39.50, -98.35),
+      zoom: 4,
+      panControl: false,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      mapTypeControl: false,
+      scaleControl: true,
+      streetViewControl: false,
+      overviewMapControl: true,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+      
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+     
+    shadowImage = new google.maps.MarkerImage(
+      'http://maps.gstatic.com/mapfiles/shadow50.png', null, null, new google.maps.Point(10, 34)
+    );
+    
+    cityMarker = new google.maps.Marker({
+      position: map.getCenter(),
+      map: map,
+      visible: false,
+      icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|F28520|000000",
+      shadow: shadowImage
+    });
+    
+    for(var i = 1; i <= 10; i++) {
+      num = i.toString();
+      if (i != 10) num = '0' + num;
+      marker = new google.maps.Marker({
+        position: map.getCenter(),
+        map: map,
+        visible: false,
+        icon: "http://google-maps-icons.googlecode.com/files/yellow" + num + ".png"
+      });
+      hotSpotMarkers.push(marker);
+    }
+    
+    cityCircle = new google.maps.Circle({
+      strokeColor: "#660099",
+      strokeOpacity: 0.8,
+      strokeWeight: 1,
+      fillColor: "#660099",
+      fillOpacity: 0.15,
+      map: map,
+      center: map.getCenter(),
+      radius: 0,
+      visible: false
+    });
+
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+      setCityInputStatus();
+    });
+  }
+  
+  function setCityInputStatus() { 
+    selected = $('#city option:selected')
+    val = selected.val();
+    has_selected = (val != 0);
+    text = selected.text();
+    if (!has_selected) text = 'Where Is Your Destination?';
+    $('#city-input-status').html(text);
+    if (map != null) {
+      if (has_selected) {
+        cityMarker.setTitle(text);
+        $.ajax({
+          url: '/get_city_latlng?id=' + val,
+          type: 'get',
+          dataType: 'json',
+          success: function(data) {
+            cityPos = new google.maps.LatLng(data.lat, data.lng, false);
+            map.panTo(cityPos);
+            cityMarker.setPosition(cityPos);
+            cityMarker.setVisible(true);
+            cityCircle.setCenter(cityPos);
+            cityCircle.setVisible(true);
+            cityCircle.setRadius($('#radius').val() * 1609.34);
+          }
+        });
+      } else {
+        clearCityInputMarkers();
+      }
+    }
+  }
+    
+  function processSubmit() {
+    clearHotSpotMarkers();
+    if ($('#city').val() == 0) {
+      $('#result').html("<div class='error_msg'>Please choose your destination</div>");
+    } else {
+      $('#loading_wrapper').show();
+      input = "city=" + $('#city').val() + "&radius=" + $('#radius').val();
+      $.ajax({
+        url: $('#hot_spots_form').attr('action'),
+        type: 'get',
+        data: input,
+        dataType: 'script',
+        complete: function() {
+          $('#loading_wrapper').hide();
+        }
+      });
+    }
+  }
+  
+  function clearCityInputMarkers() { 
+    cityMarker.setVisible(false);
+    cityMarker.setTitle('');
+    cityCircle.setVisible(false);
+  }
+  
+  function clearHotSpotMarkers(count) {
+    if (count === undefined) k = -1;
+    else k = count - 1;
+    for (var i = 0; i < 10; i++) {
+      if (i != k) hotSpotMarkers[i].setVisible(false);
+      else hotSpotMarkers[i].setVisible(true);
+    }
+  }
+  
+  function showHotSpotMarkers() {
+    for (var i = 0; i < 10; i++) {
+      hotSpotMarkers[i].setVisible(true);
+    }
+  }
+   
+  $(document).ready( function() {
+    
+    setCityInputStatus();
+    
+    $('#city').change( function() {
+      setCityInputStatus();
+    });
+    
+     $( "#radius-slider" ).slider({
+       range: "min", 
+       min: 0,
+       max: 500,
+       value: 300,
+       step: 10,
+       slide: function( event, ui ) {
+         $( "#radius" ).val( ui.value );
+         cityCircle.setRadius(ui.value * 1609.34);
+       }
+     });
+     $( "#radius" ).val( $( "#radius-slider" ).slider( "value" ) );
+
+    $('#hot_spots_form').submit( function() {
+      $('#result').empty();
+      if ($('#virgin_promo').length) {
+        $('#virgin_promo').fadeOut( function() { 
+          $('#virgin_promo').remove();
+          processSubmit();
+        });
+      } else {
+        processSubmit();
+      }
+      return false;
+    });
+    
+  });
+
+</script>
+
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?sensor=false&region=US">
+</script>

@@ -1,0 +1,405 @@
+html{
+ background:#585858 url("http://cdn4.kayak.com/v534116/images/background.png");
+ color:#333
+}
+
+body {
+  background:url("http://cdn1.kayak.com/v534126/images/background-top-shadow.png") repeat-x;
+  font:13px/1.231 "Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-align:left;
+  padding-left:6px;
+  padding-right:6px;
+  margin: 0;
+}
+
+a, a:link {
+  color: #1D6DCF;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+}
+
+input, select {
+    padding: 0;
+}
+button, input, option, select, textarea {
+    font-family: inherit;
+    font-size: 12px;
+}
+
+#fixedWidthOuter { 
+  margin: auto;
+  text-align: left;
+  width: 980px;
+}
+
+#hd {
+  height: 60px;
+  padding-top: 16px;
+}
+
+#headermaintabs {
+  position: relative;
+}
+#headermaintabs, #logo {
+  float: left;
+}
+#headermaintabs {
+  line-height: 44px;
+  padding-left: 11px;
+}
+
+#headermaintabs a.navselected {
+    background-image: url("http://cdn5.kayak.com/v53415/images/nav-arrow.png");
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+
+#headermaintabs a {
+    color: #CDCDCD;
+    display: inline-block;
+    font-size: 17px;
+    font-weight: bold;
+    outline: 0 none;
+    padding: 0 8px 16px;
+    position: relative;
+    text-decoration: none;
+    text-shadow: 0 1px 1px #000000;
+}
+
+.bdMain { 
+  background: url("http://cdn1.kayak.com/v534127/images/gradients/fd-right-inset-shadow.png") no-repeat scroll 100% 0 #FFFFFF;
+  padding: 27px 0 27px 27px;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0 8px #111111;
+  display:block;
+  height: 565px;
+}
+
+.fdMainLeft {
+  width: 607px;
+  float: left;
+}
+
+.fdMainRight {
+  margin-left: 10px;
+  width: 320px;
+  height: 565px;
+  float: right; 
+}
+
+#hot_spots_form_wrapper {
+  width: 600px;
+  height: 65px;
+}
+
+.fieldLabel {
+    color: #333333;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+#city-input-field {
+  width: 200px;
+  display: block;
+  float: left;
+} 
+
+a.dropdown-wrapper {
+    background-image: -moz-linear-gradient(center top , #FDFDFD 0px, #E6E6E6 100%);
+    filter: none;
+    -moz-box-sizing: border-box;
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    color: #333333;
+    display: inline-block;
+    outline: 0 none;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+}
+
+.defaultSelect {
+    color: #333333;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.defaultSelect .dropdown-status {
+    padding: 6px 20px 5px 10px;
+}
+.dropdown-status {
+    display: block;
+    overflow: hidden;
+    padding: 5px 23px 5px 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-icon {
+    background-image: url("http://cdn1.kayak.com/v5342/images/menu-arrow-down.png");
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    height: 16px;
+    margin-top: -8px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 16px;
+}
+
+.dropdown-select {
+    bottom: 0;
+    cursor: pointer;
+    height: 100%;
+    left: 0;
+    line-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#radius-input-field {
+  float: left;
+  margin-left: 50px;
+}
+
+#radius { 
+  border: 0; 
+  color: #f28520; 
+  font-size: 14px;
+  font-weight: bold;
+  width:25px;
+  text-align: right;
+  margin-bottom: 4px;
+}
+
+#radius_value { 
+  width:65px;
+  float: right;
+}
+
+#radius_header { 
+  width: 160px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+#radius_label { 
+  width: 70px;
+  float:left;
+}
+
+#radius_unit {
+  width:35px;
+  height: 17px;
+  float:right;
+  font-size: 13px;
+}
+
+#radius-slider {
+  width: 160px;
+}
+
+#radius-slider .ui-slider-range { background: #F28520; }
+#radius-slider .ui-slider-handle { border-color: #AAAAAA; }
+
+:root .ui-button {
+  background-image: -moz-linear-gradient(center top , #ED821F 0px, #D06B13 100%);
+  filter: none;
+}
+
+:root .ui-button:hover, *:root .ui-button:focus {
+  background-image: -moz-linear-gradient(center top , #FF8C21 0px, #D06B13 100%);
+  filter: none;
+}
+
+.ui-button {
+  background: none repeat scroll 0 0 #ED821F;
+}
+
+.ui-button {
+  -moz-box-sizing: border-box;
+  border: 1px solid #BC5F0D;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8) inset;
+  cursor: pointer;
+  display: inline-block;
+  min-width: 67px;
+  outline: 0 none;
+  text-decoration: none !important;
+}
+
+.ui-button-huge > span {
+  font-size: 15px;
+  padding: 8px 34px;
+}
+
+.ui-button > span {
+  -moz-box-sizing: border-box;
+  border: 0 none;
+  color: #FFFFFF;
+  display: block;
+  font-weight: bold;
+  line-height: normal;
+  outline: 0 none;
+  padding: 4px 15px 5px;
+  text-align: center;
+  text-shadow: 0 1px 1px #5F3109, 0 1px 0 rgba(255, 255, 255, 0);
+  white-space: nowrap;
+}
+
+#hot_spots_submit_button {
+  float:right;
+  margin-top: 20px;
+}
+
+#fdvirgin {
+  margin-top: 95px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+  width: 295px;
+}
+
+#fdvirgin .promoText {
+  color: #858585;
+  line-height: 1.5em;
+  margin-top: 9px;
+}
+
+#fdRailMobilePromo.fdVirginSession {
+    margin-top: 69px;
+}
+
+.fdRailSection .contentSeparator {
+    background-color: #FFFFFF;
+    border-top: 1px solid #DEDEDE;
+    clear: both;
+    height: 1px;
+}
+
+
+#fdRailMobilePromo h2 {
+    margin-bottom: 9px;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+#fdRailMobilePromo .mobileLinks {
+    color: #DEDEDE;
+}
+
+#fdRailMobilePromo .liner {
+    background: url("http://cdn3.kayak.com/v53454/images/icons/mobile-promo-icon.png") no-repeat scroll 2px 7px transparent;
+    line-height: 1.4em;
+    padding: 11px 0 8px 40px;
+}
+
+#loading_wrapper {
+  margin: 240px auto;
+  width: 300px;
+  text-align:center;
+  height: 60px;
+}
+
+#loading_message {
+  color: #ED821F;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.hs_header {
+  width: 300px;
+  height: 20px;
+  margin: 30px 0 20px 0;
+  text-align:center;
+  color: #333333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.hs_links {
+  width: 300px;
+  margin-left:5px;
+  text-align: right;
+}
+
+.hs_marker_link a {
+  font-size: 12px;
+  color: #333;
+}
+
+.hs_marker_link a:hover, .hs_marker_link a:focus {
+  color: #ED821F;
+}
+
+.hs_elem {
+  width: 300px;
+  height: 45px;
+  border-bottom: 1px solid #AAA;
+  margin-left:5px;
+}
+
+.hs_elem_marker {
+  width: 27px;
+  margin:10px 15px 0 5px;
+  float:left;
+}
+
+.hs_elem_info {
+  width: 200px;
+  margin-top: 7px;
+  float:left;
+}
+
+.hs_elem_loc a {
+  color: #333333;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.hs_elem_loc a:hover, .hs_elem_loc a:focus { 
+  color: #ED821F;
+}
+
+.hs_elem_date {
+  color: #888;
+  font-size: 11px;
+}
+
+.hs_elem_temp {
+  color: #6600CC;
+  font-size: 20px;
+  font-weight: bold;
+  width: 40px;
+  float:right;
+  margin-top: 10px;
+}
+
+.hs_elem_temp_unit { 
+  color: #660099;
+  font-size: 14px;
+}
+
+.error_msg {
+  width: 300px;
+  color: #333333;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.error_msg_city {
+  color: #ED821F;
+  font-size: 25px;
+  margin: 20px 0;
+}

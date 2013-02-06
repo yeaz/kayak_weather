@@ -1,0 +1,11 @@
+<% if @hot_spots.blank? %>
+$('#result').html("<div class='error_msg'>There are no major cities near <div class='error_msg_city'> <%= @city.name %>, <%= @city.state %></div> within <%= @radius %> miles</div>");
+<% else %>
+$('#result').html("<%= escape_javascript(render partial:'weather/hot_spots', locals: { hot_spots: @hot_spots, city: @city, radius: @radius }) %>");
+<% i = 0 %>
+<% for hs in @hot_spots %>
+hotSpotMarkers[<%= i %>].setVisible(true);
+hotSpotMarkers[<%= i %>].setPosition(new google.maps.LatLng(<%= hs.lat.to_f %>, <%= hs.lng.to_f %>, false));
+<% i += 1 %>
+<% end %>
+<% end %>
