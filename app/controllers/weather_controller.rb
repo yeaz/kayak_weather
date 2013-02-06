@@ -12,10 +12,11 @@ class WeatherController < ApplicationController
     api_key_id = 0
     for distance in distances
       dest = distance.destination
-      puts Time.now
-      puts api_key_id
       response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
       api_key_id = (api_key_id + 1) % 4
+      sleep 0.3 if api_key_id == 0
+      puts Time.now
+      puts api_key_id
       cityForecasts = response['forecastList']
       
       for cf in cityForecasts
