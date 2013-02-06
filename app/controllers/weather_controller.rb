@@ -12,6 +12,11 @@ class WeatherController < ApplicationController
     for distance in distances
       dest = distance.destination
       response = Weatherbug.getForecast(dest.lat, dest.lng)
+      
+      while(true) do
+        break if !response.blank?
+      end
+      
       cityForecasts = response['forecastList']
       
       for cf in cityForecasts
