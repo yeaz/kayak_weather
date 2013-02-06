@@ -9,8 +9,10 @@ class WeatherController < ApplicationController
     forecasts = []
     distances = Distance.where('city_id = ? AND value <= ?', @city, @radius)
     
+
     for distance in distances
       dest = distance.destination
+      sleep 0.5 # Due to API QPS Restrictions
       puts Time.now
       response = Weatherbug.getForecast(dest.lat, dest.lng)
       cityForecasts = response['forecastList']
