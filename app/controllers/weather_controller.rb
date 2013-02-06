@@ -9,12 +9,12 @@ class WeatherController < ApplicationController
     forecasts = []
     distances = Distance.where('city_id = ? AND value <= ?', @city, @radius)
     
-
+    api_key_id = 0
     for distance in distances
       dest = distance.destination
-      sleep 0.5 # Due to API QPS Restrictions
-      puts Time.now
-      response = Weatherbug.getForecast(dest.lat, dest.lng)
+      puts Time.now + " " + api_key_id
+      response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
+      api_key_id = (api_key_id + 1) % 3
       cityForecasts = response['forecastList']
       
       for cf in cityForecasts
