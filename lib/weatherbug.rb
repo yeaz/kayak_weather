@@ -3,6 +3,7 @@ require 'rubygems'
 
 class Weatherbug 
   include HTTParty
+  format :json
   base_uri 'http://i.wxbug.net'
 
   def self.getForecast(la, lo)

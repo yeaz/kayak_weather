@@ -11,7 +11,7 @@ class WeatherController < ApplicationController
     
     for distance in distances
       dest = distance.destination
-      response = ActiveSupport::JSON.decode(Weatherbug.getForecast(dest.lat, dest.lng))
+      response = Weatherbug.getForecast(dest.lat, dest.lng)
       cityForecasts = response['forecastList']
       
       for cf in cityForecasts
