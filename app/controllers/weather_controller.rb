@@ -13,9 +13,14 @@ class WeatherController < ApplicationController
     for distance in distances
       dest = distance.destination
       response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
-      api_key_id = (api_key_id + 1) % 11
-      sleep 0.6 if api_key_id == 0 # To prevent API call restriction response 'Developer Over QPS'
-      cityForecasts = response['forecastList']
+      while (Weatherbug.rating_restricted(response)) do
+        puts 'API CALL RATING RESTRICTED'
+        response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
+      end
+      data = ActiveSupport::JSON.decode(response.body);
+      api_key_id = (api_key_id + 1) % 10
+      #sleep 0.6 if api_key_id == 0 # To prevent API call restriction response 'Developer Over QPS'
+      cityForecasts = data['forecastList']
       
       for cf in cityForecasts
         if !cf['high'].blank?
