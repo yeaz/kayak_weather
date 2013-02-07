@@ -13,17 +13,16 @@
 
 ActiveRecord::Schema.define(:version => 20130205044906) do
 
-  create_table "cities", :force => true do |t|
-    t.string "name",  :null => false
-    t.string "state", :null => false
-    t.string "lat",   :null => false
-    t.string "lng",   :null => false
-  end
-
   create_table "distances", :force => true do |t|
-    t.integer "city_id",        :null => false
+    t.integer "origin_id",      :null => false
     t.integer "destination_id", :null => false
     t.integer "value",          :null => false
+  end
+
+  create_table "places", :force => true do |t|
+    t.string "name", :null => false
+    t.string "lat",  :null => false
+    t.string "lng",  :null => false
   end
 
 end

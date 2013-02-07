@@ -3,30 +3,36 @@ class WeatherController < ApplicationController
   def get_hot_spots
     
     @hot_spots = []
-    @city = City.find(params[:city])
-    @radius = params[:radius]
-    distances = Distance.where('city_id = ? AND value <= ?', @city, @radius)
+    @place = Place.find(params[:place])
+    @distance = params[:distance]
+    geonames_api = params[:geonamesAPI] == 'true'
     
-    cities = [@city]
-    for d in distances
-      cities << d.destination
+    places = [@place]
+    if geonames_api
+      rad = (@distance.to_i * 1.60934).to_s
+      geoResponse = Geonames.getPlaces(@place.lat, @place.lng, rad, "1000")
+      geoList = geoResponse['geonames']
+      puts geoList.length
+      for gn in geoList
+        places << Place.new(name: gn['name'] + ", " + gn['state'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+      end
+    else
+      distances = Distance.where('origin_id = ? AND value <= ?', @place, @distance)
+      for d in distances
+        places << d.destination
+      end
     end
-    
     
     forecasts = []
     id = 0
-    
-    for c in cities
+    for p in places
       id = (id + 1) % 10
-      data = Weatherbug.getForecast(c.lat, c.lng, id)
-      cityForecasts = data['forecastList']
+      fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
+      fcList = fcResponse['forecastList']
       
-      for cf in cityForecasts
-        if !cf['high'].blank?
-          loc = c.name + ", " + c.state
-          dateTime = cf['dateTime']
-          temp = cf['high'].to_i
-          forecasts << Forecast.new(c.lat, c.lng, loc, dateTime, temp)
+      for fc in fcList
+        if !fc['high'].blank?
+          forecasts << Forecast.new(p.name, p.lat, p.lng, fc['dateTime'], fc['high'].to_i)
         end
       end
     end
@@ -54,7 +60,7 @@ class WeatherController < ApplicationController
   
   def get_city_latlng
     
-    city = City.find(params[:id])
+    city = Place.find(params[:id])
     latlng = {lat: city.lat.to_f, lng: city.lng.to_f}
     respond_to do |format|
       format.json { render json: latlng }

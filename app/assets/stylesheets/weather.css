@@ -165,12 +165,12 @@ a.dropdown-wrapper {
     top: 0;
 }
 
-#radius-input-field {
+#distance-input-field {
   float: left;
-  margin-left: 50px;
+  margin-left: 45px;
 }
 
-#radius { 
+#distance { 
   border: 0; 
   color: #f28520; 
   font-size: 14px;
@@ -180,35 +180,35 @@ a.dropdown-wrapper {
   margin-bottom: 4px;
 }
 
-#radius_value { 
+#distance_value { 
   width:65px;
   float: right;
 }
 
-#radius_header { 
+#distance_header { 
   width: 160px;
   height: 20px;
   margin-bottom: 10px;
 }
 
-#radius_label { 
+#distance_label { 
   width: 70px;
   float:left;
 }
 
-#radius_unit {
+#distance_unit {
   width:35px;
   height: 17px;
   float:right;
   font-size: 13px;
 }
 
-#radius-slider {
+#distance-slider {
   width: 160px;
 }
 
-#radius-slider .ui-slider-range { background: #F28520; }
-#radius-slider .ui-slider-handle { border-color: #AAAAAA; }
+#distance-slider .ui-slider-range { background: #F28520; }
+#distance-slider .ui-slider-handle { border-color: #AAAAAA; }
 
 :root .ui-button {
   background-image: -moz-linear-gradient(center top , #ED821F 0px, #D06B13 100%);
@@ -360,13 +360,20 @@ a.dropdown-wrapper {
   float:left;
 }
 
-.hs_elem_loc a {
+.hs_elem_name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.hs_elem_name a {
   color: #333333;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
-.hs_elem_loc a:hover, .hs_elem_loc a:focus { 
+.hs_elem_name a:hover, .hs_elem_name a:focus { 
   color: #ED821F;
 }
 
