@@ -18,7 +18,7 @@ class WeatherController < ApplicationController
       if numGeos > limit 
        for i in 0..(numGeos-1)
          index = limit*(i % div) + i/div
-         if index < limit
+         if index < numGeos - 1
            gn = geoList[index]
            places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
          end 
