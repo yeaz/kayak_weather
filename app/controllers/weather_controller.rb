@@ -17,10 +17,11 @@ class WeatherController < ApplicationController
       end
     else
       distances = Distance.where('origin_id = ? AND value <= ?', @place, @distance)
+      puts distances
       for d in distances
+        puts d
         places << d.destination
       end
-      puts places
     end
     
     forecasts = []
