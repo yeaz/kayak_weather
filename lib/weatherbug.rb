@@ -23,7 +23,7 @@ class Weatherbug
     id = i
     invalid = true               
     while invalid do
-      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[i])
+      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[id])
       invalid = response.body.include?('Developer Over Qps')
       id = (id + 1) % 11
     end
