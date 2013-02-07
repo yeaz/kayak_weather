@@ -4,6 +4,8 @@ require 'rubygems'
 class Weatherbug 
   include HTTParty
   format :json
+  headers 'Content-Type' => "application/json"
+  headers 'Accepts' => "application/json"
   base_uri 'http://i.wxbug.net'
 
   def self.getForecast(la, lo, i)
