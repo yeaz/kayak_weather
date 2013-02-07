@@ -22,12 +22,11 @@ class WeatherController < ApplicationController
         places << d.destination
       end
     end
-    puts "NUMBER OF PLACES"
-    puts places.length
+
     forecasts = []
     id = 0
     for p in places
-      id = (id + 1) % 11
+      id = (id + 1) % 30
       fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
       fcList = fcResponse['forecastList']
       
