@@ -24,9 +24,7 @@ class WeatherController < ApplicationController
     end
 
     forecasts = []
-    id = 0
     for p in places
-      id = (id + 1) % 2
       fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
       fcList = fcResponse['forecastList']
       
