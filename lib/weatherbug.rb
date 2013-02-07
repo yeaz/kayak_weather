@@ -6,16 +6,17 @@ class Weatherbug
   format :json
   base_uri 'http://i.wxbug.net'
   
-  API_KEY = 'fbzpn6ambx9de5nusf49rv4d'
+  API_KEYS = ['s5ud8b4gw5ufatuktycbf4uz', 'ytdtfvxpxhg7x9ue2yckrgud',
+              'tvyn6gea7shqgx8ktx9xy468']
   
               
-  def self.getForecast(la, lo)
+  def self.getForecast(la, lo, i)
+    id = i
     invalid = true               
     while invalid do
-      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEY)
+      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[id])
       invalid = response.body.include?('<h1>Developer')
-      puts response.header
-      sleep 0.5 if invalid
+      id = (id+1) % 3
     end
     response
   end

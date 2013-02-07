@@ -12,8 +12,21 @@ class WeatherController < ApplicationController
       rad = (@distance.to_i * 1.60934).to_s
       geoResponse = Geonames.getPlaces(@place.lat, @place.lng, rad, "1000")
       geoList = geoResponse['geonames']
-      for gn in geoList
-        places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+      numGeos = geoList.length
+      limit = 100
+      div = numGeos/limit 
+      if numGeos > limit 
+       for i in 0..(numGeos-1)
+         index = limit*(i % div) + i/div
+         if index < limit
+           gn = geoList[index]
+           places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+         end 
+       end
+      else 
+        for gn in geoList
+          places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+        end
       end
     else
       places << @place
@@ -24,10 +37,12 @@ class WeatherController < ApplicationController
     end
 
     forecasts = []
+    id = 0
     for p in places
       fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
       fcList = fcResponse['forecastList']
-      
+      id = (id + 1) % 3
+      sleep 0.5 if id == 0 
       for fc in fcList
         if !fc['high'].blank?
           forecasts << Forecast.new(p.name, p.lat, p.lng, fc['dateTime'], fc['high'].to_i)
