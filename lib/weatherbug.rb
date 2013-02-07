@@ -10,13 +10,12 @@ class Weatherbug
   
               
   def self.getForecast(la, lo, i)
-    id = i
     invalid = true               
     while invalid do
-      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[id])
+      response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[i])
       invalid = response.body.include?('<h1>Developer')
-      puts id.to_s + " " + response.header if invalid
-      id = (id + 1) % 2
+      puts id.to_s + " " + response.header
+      sleep 0.5 if invalid
     end
     response
   end
