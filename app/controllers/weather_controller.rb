@@ -5,24 +5,28 @@ class WeatherController < ApplicationController
     @hot_spots = []
     @city = City.find(params[:city])
     @radius = params[:radius]
-    
-    forecasts = []
     distances = Distance.where('city_id = ? AND value <= ?', @city, @radius)
     
+    cities = [@city]
+    for d in distances
+      cities << d.destination
+    end
+    
+    
+    forecasts = []
     id = 0
-    for distance in distances
-      dest = distance.destination
-      data = Weatherbug.getForecast(dest.lat, dest.lng, id)
+    
+    for c in cities
       id = (id + 1) % 10
-      #sleep 0.6 if api_key_id == 0 # To prevent API call restriction response 'Developer Over QPS'
+      data = Weatherbug.getForecast(c.lat, c.lng, id)
       cityForecasts = data['forecastList']
       
       for cf in cityForecasts
         if !cf['high'].blank?
-          loc = dest.name + ", " + dest.state
+          loc = c.name + ", " + c.state
           dateTime = cf['dateTime']
           temp = cf['high'].to_i
-          forecasts << Forecast.new(dest.lat, dest.lng, loc, dateTime, temp)
+          forecasts << Forecast.new(c.lat, c.lng, loc, dateTime, temp)
         end
       end
     end
