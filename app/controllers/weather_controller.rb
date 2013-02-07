@@ -9,16 +9,11 @@ class WeatherController < ApplicationController
     forecasts = []
     distances = Distance.where('city_id = ? AND value <= ?', @city, @radius)
     
-    api_key_id = 0
+    id = 0
     for distance in distances
       dest = distance.destination
-      response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
-      while (Weatherbug.rating_restricted(response)) do
-        puts 'API CALL RATING RESTRICTED'
-        response = Weatherbug.getForecast(dest.lat, dest.lng, api_key_id)
-      end
-      data = ActiveSupport::JSON.decode(response.body);
-      api_key_id = (api_key_id + 1) % 10
+      data = Weatherbug.getForecast(dest.lat, dest.lng, id)
+      id = (id + 1) % 10
       #sleep 0.6 if api_key_id == 0 # To prevent API call restriction response 'Developer Over QPS'
       cityForecasts = data['forecastList']
       
