@@ -28,7 +28,8 @@ class Weatherbug
     invalid = true               
     while invalid do
       response = get('/REST/Direct/GetForecast.ashx?la=' + la + '&lo=' + lo + '&nf=7&ht=t&l=en&c=US&api_key=' + API_KEYS[id])
-      invalid = response.body.include?('Developer')
+      invalid = response.body.include?('<h1>Developer')
+      puts id.to_s + " " + response.body if invalid
       id = (id + 1) % 30
     end
     response
