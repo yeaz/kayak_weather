@@ -21,7 +21,7 @@
               <a id="city-input-wrapper" class="dropdown-wrapper dropdown defaultSelect">
                 <span id="city-input-status" class="dropdown-status"></span>
                 <span class="dropdown-icon"></span>
-                <%= select_tag :city, options_for_select(cities_array, 0), class: 'dropdown-select'  %>
+                <%= select_tag :city, options_for_select(cities_array, 248), class: 'dropdown-select'  %>
               </a>
             </div>
         
@@ -87,8 +87,8 @@
   
   function initializeMap() {
     var mapOptions = {
-      center: new google.maps.LatLng(39.50, -98.35),
-      zoom: 4,
+      center: new google.maps.LatLng(37.77493, -122.41942),
+      zoom: 5,
       panControl: false,
       zoomControl: true,
       zoomControlOptions: {

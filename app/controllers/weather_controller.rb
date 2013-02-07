@@ -12,15 +12,15 @@ class WeatherController < ApplicationController
       rad = (@distance.to_i * 1.60934).to_s
       geoResponse = Geonames.getPlaces(@place.lat, @place.lng, rad, "1000")
       geoList = geoResponse['geonames']
-      puts geoList.length
       for gn in geoList
-        places << Place.new(name: gn['name'] + ", " + gn['state'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+        places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
       end
     else
       distances = Distance.where('origin_id = ? AND value <= ?', @place, @distance)
       for d in distances
         places << d.destination
       end
+      puts places
     end
     
     forecasts = []
