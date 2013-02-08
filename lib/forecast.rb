@@ -1,6 +1,7 @@
 class Forecast
   include Comparable
   attr_reader :name, :lat, :lng, :dateTime, :temp
+  
   def initialize(name, lat, lng, dateTime, temp)
     @name = name
     @lat = lat

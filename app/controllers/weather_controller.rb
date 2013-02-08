@@ -80,15 +80,24 @@ class WeatherController < ApplicationController
   
   private 
   
+    #
+    # Method: get_ith_warmest
+    # -------------------------------------------------
+    # Implementation of the linear time median of medians
+    # selection algorithm for selecting ith largest/smallest
+    # element in an unsorted array.
+    #
     def get_ith_warmest(array, i)
-      numElems = array.length
-      if numElems <= 5
+      # Base case
+      if array.length <= 5
         array.sort! { |x, y| y <=> x }
         array[i-1]
       else
         median = get_median(array)
         low = []
         high = []
+        
+        # Partitioning array based on median-of-medians
         for elem in array
           if elem < median
             low << elem
@@ -96,8 +105,9 @@ class WeatherController < ApplicationController
             high << elem
           end
         end
-                
-        k = high.length + 1
+        
+        # Recursive call         
+        k = high.length + 1 # k is the rank of median-of-medians 
         if i > k
           get_ith_warmest(low, i - k) 
         elsif i < k
@@ -105,10 +115,17 @@ class WeatherController < ApplicationController
         else
           median
         end
-        
       end
     end
     
+    #
+    # Method: get
+    # -------------------------------------------------
+    # Helper method for getting the median of an unsorted
+    # array. It divides the array into subsets of 5 elements
+    # each, computes the medians of those subsets, and recursively
+    # gets the median of those medians.
+    #
     def get_median(array)
       numElems = array.length
       if numElems <= 5

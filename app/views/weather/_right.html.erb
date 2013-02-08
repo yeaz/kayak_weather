@@ -1,0 +1,34 @@
+<div id='virgin_promo'>
+  <div id='feature_explanation'>
+    <% if page == "local" %>
+      The <span class="feature_title">Local</span> feature satisfies the challenge requirements.
+      Distance can be adjusted up to 30 miles, based on your search needs.<br/><br/>
+      If the number of populated places returned by the Geonames API is large,
+      we select 100 places among them by using a simple deterministic sampling method.
+      This filtering is only installed to reduce Weatherbug API calls, which has QPS restrictions(2 per second)
+      and to ensure a reasonable response time for the user.
+    <% elsif page == "cities" %>
+      The <span class="feature_title">Cities</span> feature is a spinoff of the original challenge requirements, which was inspired from
+      identifying two problems with the Geonames API:<br/><br/>
+      (1) It limits radius to <b>300km</b>(much shorter than the original 500 miles)<br/><br/>
+      (2) It doesn't support a call that returns <b>only cities</b> for nearby places<br/><br/>
+      I solved these two problems by creating my own database of cities and the distances between them.
+      Unlike <span class="feature_title">Local</span>, the Geonames API is not used in <span class="feature_title">Cities</span> and instead, data comes directly from this internal database.<br/>
+      I used GeoNames.org resource <%= link_to 'cities15000.txt', 'http://download.geonames.org/export/dump/', target: '_blank'%>
+      as the data source and wrote a Java parser to retrieve data for major cities, which I defined as having a population of 100K or more. (<%= link_to 'Parser source code', 'https://github.com/yeaz/KayakWeather/blob/master/PlaceParser.java', target: '_blank' %>)
+    <% end %>
+  </div>
+  <div id="fdvirgin">
+    <img alt="SEARCH ONE AND DONE. - Compare hundreds of travel sites at once. Choose where to book." src="http://cdn3.kayak.com/v534175/images/fd/sloganonly/fd-marketing-message.png">
+    <div class="promoText">
+      Compare hundreds of travel sites at once.
+      <br>
+      Choose where to book.
+    </div>
+  </div>
+</div>
+<div id='loading_wrapper' style="display:none">
+  <div id='loading_message'>Please wait momentarily,<br> We are searching for nearby hot spots</div>
+  <%= image_tag 'loading.gif', alt:'Loading...' %>
+</div>
+<div id='result'></div>

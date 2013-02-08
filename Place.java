@@ -6,12 +6,19 @@ public class Place {
   private double lat;
   private double lng;
   
+  /* CONSTRUCTOR METHOD */
   public Place(String p_name, double p_lat, double p_lng) {
     name = p_name;
     lat = p_lat;
     lng = p_lng;
   }
   
+  /* 
+   * Method: distanceFrom
+   * -------------------------------------------
+   * Computes the distance between two places in
+   * miles, using their latitudes and longitudes.
+   */
   public int distanceFrom(Place place) { 
     double dlng = Math.toRadians(lng - place.lng);
     double dlat = Math.toRadians(lat - place.lat);
@@ -23,14 +30,29 @@ public class Place {
     return (int) distance;
   }
   
+  /* 
+   * Method: getName
+   * -------------------------------------------
+   * Returns name of place.
+   */
   public String getName() {
    return name;
   }
-
+  
+  /* 
+   * Method: getLat
+   * -------------------------------------------
+   * Returns latitude of place.
+   */
   public double getLat() {
    return lat;
   }
   
+  /* 
+   * Method: getLng
+   * -------------------------------------------
+   * Returns longitude of place.
+   */
   public double getLng() {
    return lng;
   }

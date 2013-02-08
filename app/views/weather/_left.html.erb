@@ -1,0 +1,33 @@
+<div id='hot_spots_form_wrapper'>
+  <%= form_tag get_hot_spots_url, method: :get, id: :hot_spots_form do %>
+          
+  <div id="city-input-field">
+    <% cities_array = [['', 0]] %>
+    <% cities_array += Place.order(:name).map { |city| [city.name, city.id] } %>
+    <label class="fieldLabel">Destination</label>
+    <a id="city-input-wrapper" class="dropdown-wrapper dropdown defaultSelect">
+      <span id="city-input-status" class="dropdown-status"></span>
+      <span class="dropdown-icon"></span>
+      <%= select_tag :city, options_for_select(cities_array, 248), class: 'dropdown-select'  %>
+    </a>
+  </div>
+        
+  <div id="distance-input-field">
+    <div id="distance_header">
+      <label id="distance_label" class="fieldLabel">Distance</label>
+      <div id="distance_value">
+        <%= text_field_tag :distance %>
+        <label id="distance_unit" class="fieldLabel">miles</label>
+      </div>
+    </div>
+    <div id='distance-slider'></div>
+  </div>
+        
+  <button id="hot_spots_submit_button" class="ui-button ui-button-huge" type="submit">
+    <span>Find Hot Spots</span>
+  </button>
+  
+  <% end %>
+  
+</div>
+<div id="map_canvas" style="width:600px; height:500px"></div>

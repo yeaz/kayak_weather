@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
   <%= favicon_link_tag '/k.ico' %>
 </head>
-<body onload="initializeMap()">
+<body <%= yield :onload %>>
 
 <%= yield %>
 
