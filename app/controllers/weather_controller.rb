@@ -39,8 +39,7 @@ class WeatherController < ApplicationController
     for p in places
       fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
       fcList = fcResponse['forecastList']
-      id = (id + 1) % 3
-      sleep 0.5 if id == 0 
+      id = (id + 1) % 5
       for fc in fcList
         if !fc['high'].blank?
           forecasts << Forecast.new(p.name, p.lat, p.lng, fc['dateTime'], fc['high'].to_i)
