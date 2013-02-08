@@ -1,23 +1,35 @@
 class WeatherController < ApplicationController
   
+  #
+  # Method: get_hot_spots
+  # -------------------------------------------------
+  # Returns the top ten hot spots from the origin and
+  # distance requested.
+  #
   def get_hot_spots
     
     @hot_spots = []
-    @place = Place.find(params[:place])
+    @origin = Place.find(params[:place])
     @distance = params[:distance]
-    geonames_api = params[:geonamesAPI] == 'true'
+    
+    # GET PLACES WITHIN REQUESTED DISTANCE FROM ORIGIN
     
     places = []
-    if geonames_api
-      rad = (@distance.to_i * 1.60934).to_s
-      geoResponse = Geonames.getPlaces(@place.lat, @place.lng, rad, "1000")
+    if params[:geonamesAPI] == 'true'
+      ##   USE GEONAMES API   ##
+      rad = (@distance.to_i * 1.60934).to_s # Converting miles to kilometers
+      geoResponse = Geonames.getPlaces(@origin.lat, @origin.lng, rad, "1000")
       geoList = geoResponse['geonames']
+      
+      # SAMPLING (DETERMINISTIC, EVEN DISTRIBUTION)
       numGeos = geoList.length
       limit = 100
-      c = (numGeos*1.0)/limit
+      
+      # Checks if number of returned places is large
       if numGeos > limit
+        c = (numGeos*1.0)/limit
         for i in 0..(limit-1)
-          index = (c*i).to_i
+          index = (c*i).to_i # Index for sampled place
           gn = geoList[index]
           places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
         end
@@ -27,25 +39,30 @@ class WeatherController < ApplicationController
         end
       end
     else
-      places << @place
-      distances = Distance.where('origin_id = ? AND value <= ?', @place, @distance)
+      ##   USE DATABASE   ##
+      places << @origin
+      distances = Distance.where('origin_id = ? AND value <= ?', @origin, @distance)
       for d in distances
         places << d.destination
       end
     end
 
+    # GET 7-DAY FORECASTS FOR ALL PLACES
+    
     forecasts = []
-    id = 0
+    id = 0 # API KEY ID - Used to alternate between multiple api keys to reduce response time
     for p in places
       fcResponse = Weatherbug.getForecast(p.lat, p.lng, id)
       fcList = fcResponse['forecastList']
-      id = (id + 1) % 5
+      id = (id + 1) % 8
       for fc in fcList
         if !fc['high'].blank?
           forecasts << Forecast.new(p.name, p.lat, p.lng, fc['dateTime'], fc['high'].to_i)
         end
       end
     end
+    
+    # GET TOP 10 HOT SPOTS
     
     if forecasts.length > 10
       tenth = get_ith_warmest(forecasts, 10)
@@ -60,6 +77,8 @@ class WeatherController < ApplicationController
       end
     end
     
+    # SORT HOT SPOTS
+    
     @hot_spots.sort! { |x, y| y <=> x }
 
     respond_to do |format|
@@ -68,6 +87,12 @@ class WeatherController < ApplicationController
     
   end
   
+  #
+  # Method: get_city_latlng
+  # -------------------------------------------------
+  # Returns the latitude and longitude of requested city
+  # in JSON. Used for Google Map city marker positioning.
+  #
   def get_city_latlng
     
     city = Place.find(params[:id])
@@ -83,9 +108,9 @@ class WeatherController < ApplicationController
     #
     # Method: get_ith_warmest
     # -------------------------------------------------
-    # Implementation of the linear time median of medians
-    # selection algorithm for selecting ith largest/smallest
-    # element in an unsorted array.
+    # Implementation of the worst-case O(n) median of medians
+    # selection algorithm. It selects the ith warmest forecast
+    # in an unsorted array. ( i = 10 in our case )
     #
     def get_ith_warmest(array, i)
       # Base case
@@ -119,7 +144,7 @@ class WeatherController < ApplicationController
     end
     
     #
-    # Method: get
+    # Method: get_median
     # -------------------------------------------------
     # Helper method for getting the median of an unsorted
     # array. It divides the array into subsets of 5 elements

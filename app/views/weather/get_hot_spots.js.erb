@@ -1,7 +1,7 @@
 <% if @hot_spots.blank? %>
-$('#result').html("<div class='error_msg'>There are no major cities near <div class='error_msg_city'> <%= @city.name %></div> within <%= @radius %> miles</div>");
+$('#result').html("<div class='error_msg'>There are no major cities near <div class='error_msg_city'> <%= @origin.name %></div> within <%= @distance %> miles</div>");
 <% else %>
-$('#result').html("<%= escape_javascript(render partial:'weather/hot_spots', locals: { hot_spots: @hot_spots, place: @place, distance: @distance }) %>");
+$('#result').html("<%= escape_javascript(render partial:'weather/hot_spots', locals: { hot_spots: @hot_spots, origin: @origin, distance: @distance }) %>");
 <% i = 0 %>
 <% for hs in @hot_spots %>
 hotSpotMarkers[<%= i %>].setVisible(true);
