@@ -3,28 +3,31 @@
     <% if page == "local" %>
       The <span class="feature_title">Local</span> feature satisfies the challenge requirements.
       Distance can be adjusted up to 30 miles, based on your search needs.<br/><br/>
-      If the number of populated places returned by the Geonames API is large,
-      we select 100 places among them by using a simple deterministic sampling method.
-      This filtering is only installed to reduce Weatherbug API calls, which has QPS restrictions(2 per second)
-      and to ensure a reasonable response time for the user.
+      If the number of places returned by the Geonames API is large,
+      the application deterministically selects 100 places among them by using a simple sampling method.
+      This sampling was installed for two purposes:<br/><br/>
+      
+      (2) Ensure an even distribution of close/distant places from the origin<br/><br/>
+      (1) Reduce Weatherbug API calls and prevent QPS restriction blockage<br/><br/>
+      
+      Setting a small maxRows value for the Geonames API parameter will <b>only return the closest places, 
+      regardless of the radius value</b>. This is because the returned places are sorted by distance from the origin.
+      For example, a call with radius=30 miles and maxRows=20 will most likely return places 
+      that are only a few miles away from the origin. For the same case, my sampling will first receive max 1000
+      places (which is sufficient in most cases for radius=30 miles) and then choose 20 places that are more evenly spread across
+      the request boundary.
     <% elsif page == "cities" %>
       The <span class="feature_title">Cities</span> feature is a spinoff of the original challenge requirements, which was inspired from
       identifying two problems with the Geonames API:<br/><br/>
       (1) It limits radius to <b>300km</b>(much shorter than the original 500 miles)<br/><br/>
       (2) It doesn't support a call that returns <b>only cities</b> for nearby places<br/><br/>
       I solved these two problems by creating my own database of cities and the distances between them.
-      Unlike <span class="feature_title">Local</span>, the Geonames API is not used in <span class="feature_title">Cities</span> and instead, data comes directly from this internal database.<br/>
+      Unlike <span class="feature_title">Local</span>, the Geonames API is not used in <span class="feature_title">Cities</span> and instead, data comes directly from the application's database.<br/><br/>
       I used GeoNames.org resource <%= link_to 'cities15000.txt', 'http://download.geonames.org/export/dump/', target: '_blank'%>
-      as the data source and wrote a Java parser to retrieve data for major cities, which I defined as having a population of 100K or more. (<%= link_to 'Parser source code', 'https://github.com/yeaz/KayakWeather/blob/master/PlaceParser.java', target: '_blank' %>)
+      as the data source and wrote a Java parser to retrieve data for major cities, which I defined as having a population of 100K or more. (<%= link_to 'Parser source code', 'https://github.com/yeaz/KayakWeather/blob/master/PlaceParser.java', target: '_blank' %>)<br/><br/>
+      In my opinion, <span class="feature_title">Cities</span> is a more useful tool than <span class="feature_title">Local</span> from a user's perspective, because there is much more variation in temperature when dealing with a larger distance. In real life, it makes more sense to
+      see the differences in temperature on a regional level rather than a local level.
     <% end %>
-  </div>
-  <div id="fdvirgin">
-    <img alt="SEARCH ONE AND DONE. - Compare hundreds of travel sites at once. Choose where to book." src="http://cdn3.kayak.com/v534175/images/fd/sloganonly/fd-marketing-message.png">
-    <div class="promoText">
-      Compare hundreds of travel sites at once.
-      <br>
-      Choose where to book.
-    </div>
   </div>
 </div>
 <div id='loading_wrapper' style="display:none">

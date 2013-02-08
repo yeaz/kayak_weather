@@ -274,49 +274,6 @@ a.dropdown-wrapper {
   line-height: 20px;
 }
 
-#fdvirgin {
-  margin-top: 50px;
-  margin-bottom: 30px;
-  margin-left: 10px;
-  width: 295px;
-}
-
-.promoText {
-  color: #858585;
-  line-height: 1.5em;
-  margin-top: 9px;
-}
-
-#fdRailMobilePromo.fdVirginSession {
-    margin-top: 69px;
-}
-
-.fdRailSection .contentSeparator {
-    background-color: #FFFFFF;
-    border-top: 1px solid #DEDEDE;
-    clear: both;
-    height: 1px;
-}
-
-
-#fdRailMobilePromo h2 {
-    margin-bottom: 9px;
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-#fdRailMobilePromo .mobileLinks {
-    color: #DEDEDE;
-}
-
-#fdRailMobilePromo .liner {
-    background: url("http://cdn3.kayak.com/v53454/images/icons/mobile-promo-icon.png") no-repeat scroll 2px 7px transparent;
-    line-height: 1.4em;
-    padding: 11px 0 8px 40px;
-}
-
 #loading_wrapper {
   margin: 240px auto;
   width: 300px;
