@@ -31,11 +31,11 @@ class WeatherController < ApplicationController
         for i in 0..(limit-1)
           index = (c*i).to_i # Index for sampled place
           gn = geoList[index]
-          places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+          places << Place.new(name: gn['name'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
         end
       else 
         for gn in geoList
-          places << Place.new(name: gn['name'] + ", " + gn['adminCode1'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
+          places << Place.new(name: gn['name'], lat: gn['lat'].to_s, lng: gn['lng'].to_s)
         end
       end
     else
